@@ -18,7 +18,7 @@
             "type": "system",
             "manifest": "https://github.com/Zakarik/foundry-mm3/blob/main/system.json",
             "compatibility": {
-                "verified": "1.27.1"
+                "verified": "1.32.1"
             }
         }]
     },
