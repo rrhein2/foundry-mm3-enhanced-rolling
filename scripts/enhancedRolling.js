@@ -39,7 +39,7 @@ export async function rollAtkTgt(actor, name, score, data, tgt, dataKey={}) {
     await roll.evaluate();
   
     const tokenData = token.actor.system;
-    const resultDie = roll.total-total-dataStr.attaque;
+    const resultDie = roll.total-total-dataStr.attaque- shift ?? 0 - mod ?? 0;
     const parade = Number(tokenData.ddparade);
     const esquive = Number(tokenData.ddesquive);
     const sCritique = dataCbt.critique;
