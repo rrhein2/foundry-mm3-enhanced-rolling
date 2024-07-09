@@ -11,15 +11,6 @@ Hooks.once('init', async function () {
     game.mm3EnhancedRolling = {
         RollMacro
     };
-
-    game.settings.register(moduleId, regenRanksFlag, {
-        name: "Ranks in Regeneration",
-        hint: "Total ranks spent/acquired on regeneration effects in powers/equipment. -1 to Auto-calculate",
-        scope: "client",
-        config: "true",
-        type: Number,
-        default: -1
-    })
 })
 
 // Added shift element allowable for dataKey to give static alteration
