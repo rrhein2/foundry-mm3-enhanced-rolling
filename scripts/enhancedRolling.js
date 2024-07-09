@@ -4,7 +4,7 @@ import {getDices, dialogAsk} from "../../../systems/mutants-and-masterminds-3e/m
 const moduleId = "foundry-mm3-enhanced-rolling"
 const moduleName = "MM3 Enhanced Rolling"
 
-
+// TODO - update other rollers besides rollAtkTgt to allow my new dataKey values to be passed through
 
 // add utility classes to global game object so that they're more easily accessible in global contexts
 Hooks.once('init', async function () {
@@ -22,6 +22,9 @@ export async function rollAtkTgt(actor, name, score, data, tgt, dataKey={}) {
     const token = canvas.scene.tokens.find(token => token.id === tgt);
     const alt = dataKey?.alt ?? false;
     const shift = dataKey?.shift ?? 0;
+    const defaultResistShift = (x) => 0
+    const dmgResistShift = dataKey?.dmgResistShift ?? defaultResistShift
+    const aflResistShift = dataKey?.aflResistShift ?? defaultResistShift
   
     let ask = false;
     let mod = 0;
@@ -56,8 +59,8 @@ export async function rollAtkTgt(actor, name, score, data, tgt, dataKey={}) {
     let ddDefense = 0;
     let traType = "";
     let formula = `${dicesFormula} + ${total} + ${dataStr.attaque}`
-    formula += mod === 0 ? '' : ` + ${mod}`
-    formula += shift === 0 ? '' : ` + ${shift}`
+    formula += mod === 0 ? '' : mod > 0 ? ` + ${mod}` : ` - ${mod}`
+    formula += shift === 0 ? '' : shift > 0 ? ` + ${shift}` : ` - ${shift}`
     // let formula = mod === 0 ? `${dicesFormula} + ${total} + ${dataStr.attaque}` : `${dicesFormula} + ${total} + ${dataStr.attaque} + ${mod}`
   
     ddDefense = defpassive === 'parade' ? parade : esquive;
@@ -87,27 +90,27 @@ export async function rollAtkTgt(actor, name, score, data, tgt, dataKey={}) {
           typeAtk:'dmg',
           target:tgt,
           saveType:saveType,
-          vs:Number(dataCbt.effet)+Number(dataStr.effet)+Number(dataCbt.basedef),
+          vs:Number(dataCbt.effet)+Number(dataStr.effet)+Number(dataCbt.basedef)+dmgResistShift(dSuccess),
         },
         {
           typeAtk:'affliction',
           target:tgt,
           saveType:saveAffliction,
-          vs:Number(dataCbt.afflictioneffet)+Number(dataStr.effet)+Number(dataCbt.afflictiondef),
+          vs:Number(dataCbt.afflictioneffet)+Number(dataStr.effet)+Number(dataCbt.afflictiondef)+aflResistShift(dSuccess),
         });
       } else if(isDmg) {
         btn.push({
           typeAtk:'dmg',
           target:tgt,
           saveType:saveType,
-          vs:Number(dataCbt.effet)+Number(dataStr.effet)+Number(dataCbt.basedef),
+          vs:Number(dataCbt.effet)+Number(dataStr.effet)+Number(dataCbt.basedef)+dmgResistShift(dSuccess),
         });
       } else if(isAffliction) {
         btn.push({
           typeAtk:'affliction',
           target:tgt,
           saveType:saveType,
-          vs:Number(dataCbt.effet)+Number(dataStr.effet)+Number(dataCbt.basedef),
+          vs:Number(dataCbt.effet)+Number(dataStr.effet)+Number(dataCbt.basedef)+aflResistShift(dSuccess),
         });
       }
   
@@ -414,6 +417,8 @@ async function RollMacro(actorId, targetIds, sceneId, tokenId, type, what, id, a
     const strategie = {attaque:dataStr.attaque, effet:dataStr.effet};
     const hasShift = event.shiftKey;
     const hasAlt = event.altKey;
+    const dmgResistShift = event.dmgResistShift;
+    const aflResistShift = event.aflResistShift;
     
     const atk = id === '-1' || id === -1 ? {noAtk:false} : game.mm3.getAtk(actor, id)?.data ?? "";
     let name = "";
@@ -468,7 +473,7 @@ async function RollMacro(actorId, targetIds, sceneId, tokenId, type, what, id, a
       // Allows targets to be specified so scripts can differentiate targets for categorization (say for an effect with diminishing power over range)
       let targets = Array.isArray(targetIds) ? targetIds : targetIds !== undefined ? [targetIds] : game.user.targets.ids
       for(let t of targets) {
-        let roll = await rollAtkTgt(actor, name, total, {attaque:atk, strategie:strategie}, t, {alt:hasAlt, shift:hasShift});
+        let roll = await rollAtkTgt(actor, name, total, {attaque:atk, strategie:strategie}, t, {alt:hasAlt, shift:hasShift, dmgResistShift: dmgResistShift, aflResistShift: aflResistShift});
         result[t] = roll;
       }
     } 
