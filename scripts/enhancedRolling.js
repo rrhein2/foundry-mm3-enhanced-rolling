@@ -409,7 +409,7 @@ async function RollMacro(actorId, targetIds, sceneId, tokenId, type, what, id, a
     const actor = tokenId === 'null' ? game.actors.get(actorId) : game.scenes.get(sceneId).tokens.find(token => token.id === tokenId).actor;
     
     const data = actor.system;
-    const tgt = game.user.targets.ids[0];
+    const tgt = Array.isArray(targetIds) ? targetIds[0] : targetIds !== undefined ? targetIds : game.user.targets.ids[0];
     const dataStr = data?.strategie?.total ?? {attaque:0, effet:0};
     const strategie = {attaque:dataStr.attaque, effet:dataStr.effet};
     const hasShift = event.shiftKey;
