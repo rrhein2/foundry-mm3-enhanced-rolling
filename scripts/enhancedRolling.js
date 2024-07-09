@@ -56,8 +56,8 @@ export async function rollAtkTgt(actor, name, score, data, tgt, dataKey={}) {
     let ddDefense = 0;
     let traType = "";
     let formula = `${dicesFormula} + ${total} + ${dataStr.attaque}`
-    formula += mod === 0 ? '' : `${mod}`
-    formula += shift === 0 ? '' : `${shift}`
+    formula += mod === 0 ? '' : ` + ${mod}`
+    formula += shift === 0 ? '' : ` + ${shift}`
     // let formula = mod === 0 ? `${dicesFormula} + ${total} + ${dataStr.attaque}` : `${dicesFormula} + ${total} + ${dataStr.attaque} + ${mod}`
   
     ddDefense = defpassive === 'parade' ? parade : esquive;
