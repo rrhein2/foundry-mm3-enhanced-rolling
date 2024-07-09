@@ -1,5 +1,5 @@
 //import {rollStd, rollVs, rollAtkTgt, rollTgt, rollWAtk, rollAtk, rollPwr, } from "../systems/mutants-and-masterminds-3e/module/helpers/common.mjs";
-import {getDices, } from "../systems/mutants-and-masterminds-3e/module/helpers/common.mjs"
+import {getDices, } from "../../../systems/mutants-and-masterminds-3e/module/helpers/common.mjs"
 
 const moduleId = "foundry-mm3-enhanced-rolling"
 const moduleName = "MM3 Enhanced Rolling"
