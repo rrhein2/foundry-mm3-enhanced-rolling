@@ -1,12 +1,25 @@
 //import {rollStd, rollVs, rollAtkTgt, rollTgt, rollWAtk, rollAtk, rollPwr, } from "../systems/mutants-and-masterminds-3e/module/helpers/common.mjs";
 import {getDices, } from "../systems/mutants-and-masterminds-3e/module/helpers/common.mjs"
 
+const moduleId = "foundry-mm3-enhanced-rolling"
+const moduleName = "MM3 Enhanced Rolling"
+
+
 
 // add utility classes to global game object so that they're more easily accessible in global contexts
 Hooks.once('init', async function () {
     game.mm3EnhancedRolling = {
         RollMacro
-    }
+    };
+
+    game.settings.register(moduleId, regenRanksFlag, {
+        name: "Ranks in Regeneration",
+        hint: "Total ranks spent/acquired on regeneration effects in powers/equipment. -1 to Auto-calculate",
+        scope: "client",
+        config: "true",
+        type: Number,
+        default: -1
+    })
 })
 
 // Added shift element allowable for dataKey to give static alteration
