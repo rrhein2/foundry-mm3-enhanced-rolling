@@ -441,6 +441,7 @@ async function RollMacro(actorId, targetIds, sceneId, tokenId, type, what, id, a
         break;
       
       case 'attaque':
+        console.log(atk)
         const typeAtk = atk.type;
         const idSkill = atk.skill;
   
@@ -458,13 +459,11 @@ async function RollMacro(actorId, targetIds, sceneId, tokenId, type, what, id, a
     let result = undefined;
   
     if(type === 'attaque' && tgt !== undefined && atk.noAtk) {
-      console.log("inside attack with target but no attack roll")
       for(let t of game.user.targets.ids) {
         rollTgt(actor, name, {attaque:atk, strategie:strategie}, t);
       }
     } else if(type === 'attaque' && tgt !== undefined && !atk.noAtk) {
       result = {};
-      console.log("inside attack with target and attack roll")
   
       // Allows targets to be specified so scripts can differentiate targets for categorization (say for an effect with diminishing power over range)
       let targets = Array.isArray(targetIds) ? targetIds : targetIds !== undefined ? [targetIds] : game.user.targets.ids
@@ -475,17 +474,14 @@ async function RollMacro(actorId, targetIds, sceneId, tokenId, type, what, id, a
     } 
     else if(type === 'attaque' && tgt === undefined && !atk.noAtk)
     {
-        console.log("inside attack without targets but there is an attack roll")
         rollAtk(actor, name, total, {attaque:atk, strategie:strategie}, {alt:hasAlt});
     }
     else if(type === 'attaque' && atk.noAtk) 
     {
-        console.log("inside attack without an attack roll")
         rollWAtk(actor, name, {attaque:atk, strategie:strategie});
     }
     else 
     {
-        console.log("inside attack roll standard")
         rollStd(actor, name, total, {shift:hasShift, alt:hasAlt});
     }
   
