@@ -59,8 +59,8 @@ export async function rollAtkTgt(actor, name, score, data, tgt, dataKey={}) {
     let ddDefense = 0;
     let traType = "";
     let formula = `${dicesFormula} + ${total} + ${dataStr.attaque}`
-    formula += mod === 0 ? '' : mod > 0 ? ` + ${mod}` : ` - ${mod}`
-    formula += shift === 0 ? '' : shift > 0 ? ` + ${shift}` : ` - ${shift}`
+    formula += mod === 0 ? '' : mod > 0 ? ` + ${mod}` : ` - ${Math.abs(mod)}`
+    formula += shift === 0 ? '' : shift > 0 ? ` + ${shift}` : ` - ${Math.abs(shift)}`
     // let formula = mod === 0 ? `${dicesFormula} + ${total} + ${dataStr.attaque}` : `${dicesFormula} + ${total} + ${dataStr.attaque} + ${mod}`
   
     ddDefense = defpassive === 'parade' ? parade : esquive;
@@ -446,7 +446,6 @@ async function RollMacro(actorId, targetIds, sceneId, tokenId, type, what, id, a
         break;
       
       case 'attaque':
-        console.log(atk)
         const typeAtk = atk.type;
         const idSkill = atk.skill;
   
